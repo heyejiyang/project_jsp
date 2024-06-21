@@ -203,16 +203,17 @@ import java.time.LocalDateTime;
 
 public class Ex01 {
   public static void main(String[] args) throws Exception {
-    Class clazz = Member.class;
+    Class clazz = Member.class; //Member클래스의 Class객체를 가져온다.
 
-    Constructor constructor = clazz.getDeclaredConstructors()[0];
-    Object obj = constructor.newInstance();
+    Constructor constructor = clazz.getDeclaredConstructors()[0]; //Member 클래스의 첫 번째 생성자를 가져온다.
+    Object obj = constructor.newInstance(); //가져온 생성자를 사용하여 Member 객체를 생성합니다.
 
-    Method[] methods = clazz.getDeclaredMethods();
-    for (Method method : methods) {
+    Method[] methods = clazz.getDeclaredMethods(); //Member 클래스의 모든 메서드를 가져옵니다.
+    for (Method method : methods) { //각 메서드 반복
       String name = method.getName();
       if (!name.startsWith("set")) {
-        continue;
+        continue; //메서드 이름이 "set"으로 시작하지 않으면 건너뛴다.
+        //다시 메서드 이름 찾으러 ~
       }
 
       Class clz = method.getParameterTypes()[0];
