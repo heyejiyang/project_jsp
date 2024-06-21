@@ -70,10 +70,12 @@ public class MemberController {
 
 생성자의 매개변수가 몇갠지 알 수 없을때
 getParameterTypes()사용해서 개수를 알 수 있다.
+getParameterTypes(): 매개변수 타입 반환(String, int ...)
 
 ![img_5.png](img_5.png)
 
 리스트 형태를 배열로 바꿔야한다.
+
 ```java
 public class JoinService {
     public JoinService() {
@@ -109,11 +111,13 @@ public class Ex01 {
         }
       }
 
-      Object obj = arguments.isEmpty()
-              ?constructor.newInstance()
-              :
-              constructor.newInstance(arguments.toArray());
-
+     /*
+            Object obj = arguments.isEmpty()
+                            ?constructor.newInstance()
+                            :
+                            constructor.newInstance(arguments.toArray());
+            */
+      Object obj = constructor.newInstance(arguments.toArray());
       JoinService service = (JoinService) obj;
       System.out.println(service);
     }
@@ -142,6 +146,7 @@ public class Ex01 {
 ---
 Method 클래스 <br>
 - Object invoke(Object obj, Object... args) : 동적으로 메서드를 호출해줌
+  - 특정 객체의 메서드를 호출하는데 사용
 
 - String getName(): 메서드 이름 반환
 
@@ -216,18 +221,22 @@ public class Ex01 {
         //다시 메서드 이름 찾으러 ~
       }
 
-      Class clz = method.getParameterTypes()[0];
+      Class clz = method.getParameterTypes()[0]; //메서드의 매개변수 타입을 가져옴
       Object arg = null;
-      if (clz == String.class) { // setter 메서드의 매개변수가 문자열
+      if (clz == String.class) { // 매개변수 타입이 String일 경우, "문자열"이라는 값을 할당합니다.
         arg = "문자열";
-      } else if (clz == LocalDateTime.class) { // setter 메서드의 매개변수가 LocalDateTime
+      } else if (clz == LocalDateTime.class) { 
+          //// 매개변수 타입이 LocalDateTime일 경우, 현재 시간을 할당합니다.
         arg = LocalDateTime.now();
       }
 
-      method.invoke(obj, arg); // setter 메서드 호출
+      method.invoke(obj, arg); // 해당 메서드를 호출합니다.
+      //obj -> 메서드를 호출할 객체 / 여기서는 Member클래스의 인스턴스가된다.
+      //args -> 메서드에 전달할 인수 / setter메서드의 매개변수에 해당하는 값
     }
 
     System.out.println(obj);
+    //결론적으로 이 코드는 모든 setter 메서드를 동적으로 호출하여 Member 객체의 필드를 설정 하는 코드이다.
   }
 }
 ```
@@ -244,17 +253,29 @@ import java.lang.reflect.Field;
 
 public class Ex02 {
   public static void main(String[] args) throws Exception {
-    Class clazz = Member.class;
+      //Member 클래스의 Class객체를 가져옴
+    Class clazz = Member.class; 
+    //Member 클래스의 첫번째 생성자를 가져옴 (현재 어차피 기본 생성자 하나임)
     Constructor constructor = clazz.getDeclaredConstructors()[0];
+    //getDeclaredConstructors() 메서드는 클래스의 모든 생성자를 배열로 반환
+    
+    //가져온 생성자를 사용하여 Member 객체를 생성합니다.
     Object obj = constructor.newInstance();
 
+    // Member 클래스의 "str" 필드를 가져옵니다.
     Field field = clazz.getDeclaredField("str");
+
+    // 접근 제어를 무시하고 private 필드에 접근할 수 있도록 설정합니다.
     field.setAccessible(true);
     System.out.println(field);
+
+    // 생성한 객체의 "str" 필드 값을 "DEF"로 설정합니다.
     field.set(obj, "DEF");
+    //field.set(Object obj, Object value) 메서드를 사용하여 특정 객체의 필드 값을 설정합니다. 여기서는 obj 객체의 str 필드 값을 "DEF"로 변경
 
     Member member = (Member)obj;
     System.out.println(member.str);
   }
 }
 ```
+---
