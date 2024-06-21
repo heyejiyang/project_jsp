@@ -197,47 +197,36 @@ public class Member {
 //Ex01클래스
 package exam02;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
-public class Member {
-  private String userId;
-  private String email;
-  private LocalDateTime regDt;
+public class Ex01 {
+  public static void main(String[] args) throws Exception {
+    Class clazz = Member.class;
 
-  public final String str = "ABC";
+    Constructor constructor = clazz.getDeclaredConstructors()[0];
+    Object obj = constructor.newInstance();
 
-  public String getUserId() {
-    return userId;
-  }
+    Method[] methods = clazz.getDeclaredMethods();
+    for (Method method : methods) {
+      String name = method.getName();
+      if (!name.startsWith("set")) {
+        continue;
+      }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+      Class clz = method.getParameterTypes()[0];
+      Object arg = null;
+      if (clz == String.class) { // setter 메서드의 매개변수가 문자열
+        arg = "문자열";
+      } else if (clz == LocalDateTime.class) { // setter 메서드의 매개변수가 LocalDateTime
+        arg = LocalDateTime.now();
+      }
 
-  public String getEmail() {
-    return email;
-  }
+      method.invoke(obj, arg); // setter 메서드 호출
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public LocalDateTime getRegDt() {
-    return regDt;
-  }
-
-  public void setRegDt(LocalDateTime regDt) {
-    this.regDt = regDt;
-  }
-
-  @Override
-  public String toString() {
-    return "Member{" +
-            "userId='" + userId + '\'' +
-            ", email='" + email + '\'' +
-            ", regDt=" + regDt + '\'' +
-            ", str='" + str +
-            '}';
+    System.out.println(obj);
   }
 }
 ```
