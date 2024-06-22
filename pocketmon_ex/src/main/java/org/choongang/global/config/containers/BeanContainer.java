@@ -173,33 +173,47 @@ getCanonicalPath()는 이 파일의 정규화된 경로(즉, 경로에 있는 �
         return dependencies; //의존성 객체 리스트반환
     }
 
+    //이 메서드의 목적: 파일 시스템의 절대 경로를 Java 패키지 경로로 변환하여 클래스 이름을 생성하는 것
     private List<Class> getClassNames(String rootPath, String packageName) {
         List<Class> classes = new ArrayList<>();
-        List<File> files = getFiles(rootPath);
+        List<File> files = getFiles(rootPath); //rootPath아래 모든 파일들을 리스트로 반환한다.
         for (File file : files) {
-            String path = file.getAbsolutePath();
+            String path = file.getAbsolutePath(); //파일의 절대경로를 가져옵니다.
+            // ex) D:\project_jsp\pocketmon_ex\src\main\java\org\choongang\global\config\containers\Example.class
             String className = packageName + "." + path.replace(rootPath + File.separator, "").replace(".class", "").replace(File.separator, ".");
+            //패키지 이름과 파일 경로를 조합하여 클래스 이름 생성
+            //packageName -> org.choongang
+            //path.replace(rootPath + File.separator, "") -> 루트확장자 경로까지 제거
+            //path 에서 .class확장자 제거
+            //.replace(File.separator, ".") 파일구분자를 .으로 변환
+
             try {
-                Class cls = Class.forName(className);
-                classes.add(cls);
+                Class cls = Class.forName(className); //클래스 이름을 통해 클래스 객체를 생성
+                classes.add(cls); //생성된 클래스 객체를 리스트에 추가
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //객체생성 실패시 예외처리
             }
         }
-        return classes;
+        return classes; //클래스 객체 리스트 반환
     }
 
     private List<File> getFiles(String rootPath) {
         List<File> items = new ArrayList<>();
         File[] files = new File(rootPath).listFiles();
-        if (files == null) return items;
+        //rootPath를 File 객체로 만들어 해당 경로의 모든 파일과 디렉토리를 배열로 가져옴
+        //listFiles() 메서드는 해당 디렉토리의 파일과 서브 디렉토리를 File 객체 배열로 반환한다.
+
+        if (files == null) return items; //files가 null인 경우(즉, rootPath가 유효한 디렉토리가 아닌 경우) 빈 리스트를 반환
 
         for (File file : files) {
-            if (file.isDirectory()) {
+            if (file.isDirectory()) { //현재 파일이 디렉토리인지 확인
                 List<File> _files = getFiles(file.getAbsolutePath());
+                //file이 디렉토리인 경우, 해당 디렉토리의 절대 경로를 getFiles 메서드로 재귀 호출하여 그 디렉토리 안의 파일 목록을 가져온다.
+
                 if (!_files.isEmpty()) items.addAll(_files);
+                //재귀 호출의 결과로 반환된 파일 리스트(_files)가 비어있지 않다면, items 리스트에 모두 추가한다
             } else {
-                items.add(file);
+                items.add(file); //file이 디렉토리가 아닌 일반 파일인 경우, items 리스트에 추가
             }
         }
         return items;
