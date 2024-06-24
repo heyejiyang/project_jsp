@@ -2625,5 +2625,36 @@ public class HandlerAdapterImpl implements HandlerAdapter {
   
 }
 ```
+---
+MainController
+
+```java
+package org.choongang.main.controllers;
+
+import org.choongang.global.config.annotations.Controller;
+import org.choongang.global.config.annotations.GetMapping;
+import org.choongang.global.config.annotations.RequestMapping;
+
+@Controller
+@RequestMapping("/") 
+public class MainController {
+
+  @GetMapping
+  public String index(){
+    return "main/index";
+  }
+}
 
 
+```
+
+main/index.jsp
+```jsp
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="layout" tagdir="/WEB-INF/tags/layouts" %>
+<layout:main>
+    <h1>메인 페이지</h1>
+</layout:main>
+```
+---
+태그 기본 공통 스타일 초기화 - style.css
