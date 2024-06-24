@@ -40,7 +40,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         //data 리스트에 두번째 요소를 요청된 메서드로 설정
 
         String m = request.getMethod().toUpperCase(); // 요청 메서드
-        //HTTP 요청 메서드를 대문자로 변환한다.
+        //HTTP 요청 메서드를 대문자로 변환한다.(GET, POST...)
         Annotation[] annotations = method.getDeclaredAnnotations();
         //메서드에 있는 모든 annotation 배열에 저장
 
@@ -48,6 +48,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         String[] rootUrls = {""}; //루트 URL배열을 초기화
         for (Annotation anno : controller.getClass().getDeclaredAnnotations()) {  //컨트롤러 클래스의 선언된 모든 애노테이션을 반복하여 처리함
             rootUrls = getMappingUrl(m, anno); //클래스 레벨의 애노테이션들을 확인하고, 그 중에서도 HTTP 요청 메서드에 맞는 URL 패턴을 추출하여 rootUrls에 저장
+            //RequestMapping이 없다면 값이 없는경우임
         }
         /* 컨트롤러 애노테이션 처리 E */
 
@@ -75,11 +76,13 @@ public class HandlerAdapterImpl implements HandlerAdapter {
             for (String url : pathUrls) { //메서드에 정의된 모든 URL 패턴 반복
                 Matcher matcher = p.matcher(url);
                 // p를 사용하여 주어진 문자열 url에서 패턴을 찾기 위한 Matcher 객체를 생성하는 코드
+                //패턴(p)과 문자열에(url) 일치하는 패턴이 있으면 matcher에 저장
 
                 List<String> matched = new ArrayList<>();
                 while (matcher.find()) { //matcher에 값이 있으면 true
                     matched.add(matcher.group(1));
-                    //패턴에서 추출된 경로 변수 이름들을 matched 리스트에 추가
+                    //일치된 패턴들 저장한 matcher에서 group -> 일치한 문자열들 가져옴/
+                    // 추출된 경로 변수 이름들을 matched 리스트에 추가
                     //group(0)은 전체 매칭된 문자열을 반환하고, group(1)은 첫 번째 캡처 그룹에 매칭된 문자열을 반환
                 }
 
@@ -95,9 +98,11 @@ public class HandlerAdapterImpl implements HandlerAdapter {
 
                     Pattern p2 = Pattern.compile("^" + _url+"$"); //URL을 정규 표현식으로 변환
                     Matcher matcher2 = p2.matcher(request.getRequestURI());
+                    //p2 패턴과 request.getRequestURI() 일치하는 패턴이 있으면 대입
                     while (matcher2.find()) {
                         for (int i = 0; i < matched.size(); i++) {
                             pathVariables.put(matched.get(i), matcher2.group(i + 1));
+                            //"(\\w*)" 이게 그룹화로 경로가  @GetMapping("/{mode}/test/{num}") 이라고 할때 {mode} 가 group1로 {num}이 그룹 2로 잡힌다.
                         } //매칭된 경로 변수와 값을 pathVariables 맵에 저장
                     }
                 }
@@ -168,7 +173,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
 
                         Class clz = _method.getParameterTypes()[0];
                         // 자료형 변환 후 메서드 호출 처리
-                        invokeMethod(paramObj,_method, value, clz, name);
+                        invokeMethod(paramObj,_method, value, clz, name); //메서드 동적 호출
                     }
                     args.add(paramObj);
                 } // endif
@@ -202,7 +207,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
             rd.forward(request, response);
 
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getMessage()); //처리되지 않은 예외 500.jsp 유입
         }
         /* 요청 메서드 호출 E */
     }

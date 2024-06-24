@@ -1,7 +1,42 @@
 # 실무프로젝트 p-3
 
-BeanContainer.java
+### 1. 요청
+### 2. DispatcherServlet(모든 요청과 응답의 창구)
+### 3. BeanContainer::loadBeans() : 모든 관리 객체 로드(객체 생성 및 의존성 주입)
+- 특정 애노테이션이 있는 객체를 자동 생성, 의존하는 객체 주입
+- @Controller: 컨트롤러 역할 객체
+- @RestController: 컨트롤러 역할 객체 - 응답시 JSON형태로 응답
+- @Service
+- @Component
+- @ControllerAdvice: @Controller의 공통 처리
+- @RestControllerAdvice: @RestController의 공통 처리
 
+### 4. HandlerMapping - HandlerMappingImpl : 요청에 맞는 컨트롤러 객체 및 메서드 조회
+- @Controller, @RestController에 정의된 하기 애노테이션
+- @RequestMapping: 모든 요청 메서드에 매칭
+- @GetMapping: GET 요청 메서드에 매칭
+- @PostMapping: POST 요청 메서드에 매칭
+- @PatchMapping: PATCH 요청 메서드에 매칭
+- @PutMapping: PUT 요청 메서드에 매칭
+- @DeleteMapping: DELETE 요청 메서드에 매칭
+
+### 5. HandlerAdapter - HandlerAdapterImpl
+  1) 찾은 컨트롤러의 메서드 실행하여 유입된 요청을 처리
+  2) 각 컨트롤러의 반환값
+    - @Controller인 경우 : 템플릿(/WEB-INF/templates/ + 반환값 + ".jsp")로 경로 찾아 출력 버퍼 교체
+    - @RestController인 경우 : 반환값은 자바 객체가 되며 JSON 형태({"이름": "값", "이름" : "값" .. })으로 출력
+    - 요청 데이터 메서드 매개변수 주입
+    @PathVariable: 경로변수
+    @RequestParam("이름"): 요청 데이터 - GET쿼리스트링 이름, POST - 양식 입력 항목 name 값
+    
+    void setEmail(String email)
+    set -> Email -> email -> request.getParameter()
+
+  3) 컨트롤러를 찾지 못한 경우
+    - StaticResourceMapping - StaticResourceMappingImpl - 웹 정적 경로인 /webapp/static/에서 파일이 있는지 체크 하고 출력
+    - 웹 정적 경로에서도 못찾는다면 설정한 파일 업로드 경로에서 찾음
+---
+BeanContainer.java
 ---
 - 객체 조립기, 객체 자동 스캔 및 생성
 - 스캔 방법은 애노테이션 - @Controller, @RestController, @Component, @Service이 있으면 객체 생성

@@ -32,6 +32,7 @@ public class BeanContainer {
         // 패키지 경로 기준으로 스캔 파일 경로 조회
         try {
             String rootPath = new File(getClass().getResource("../../../").getPath()).getCanonicalPath(); //현재 클래스의 경로를 기준으로 루트 경로를 조회한다.
+            //getClass().getResource(): 현재 클래스 파일의 물리적 경로가 나온다. build/.../BeanContainer.class
             //이 경로는 BeanContainer 클래스 파일이 위치한 디렉토리로부터 3단계 위로 올라간다.
 /* getPath()의 결과
 첫 번째 ..: D:\project_jsp\pocketmon_ex\src\main\java\org\choongang\global\config
@@ -59,6 +60,7 @@ getCanonicalPath()는 이 파일의 정규화된 경로(즉, 경로에 있는 �
 
                 // 이미 생성된 객체라면 생성된 객체로 활용, 이미 생성된 객체인경우 건너뜀
                 if (beans.containsKey(key)) continue;
+                //매번 갱신될 필요가있는 객체일경우 updateObject(beans.get(key));
                 //containsKey는 true/false로 반환
                 //Map의 키값은 클래스명, Map에 이미 등록되어있는 key일경우 continue
 
@@ -144,7 +146,7 @@ getCanonicalPath()는 이 파일의 정규화된 경로(즉, 경로에 있는 �
             return dependencies; //반환
         }
 
-        Class[] parameters = con.getParameterTypes(); //생상자 con의 매개변수 타입들을 배열에 저장(ex String, int, 객체 자료형이 될수도?...)
+        Class[] parameters = con.getParameterTypes(); //생상자 con의 매개변수 타입들을 배열에 저장(객체 자료형)
         if (parameters.length == 0) { //매개변수가 없는 기본생성자의 경우
             Object obj = con.newInstance(); //기본생성자를 이용해서 객체 생성
             dependencies.add(obj); //해당 객체리스트에 추가
