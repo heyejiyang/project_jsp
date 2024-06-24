@@ -2657,4 +2657,6 @@ main/index.jsp
 </layout:main>
 ```
 ---
-태그 기본 공통 스타일 초기화 - style.css
+모든 레이아웃의 공통 스타일 초기화 - style.css
+
+메인 공통 스타일 초기화 - main.css
