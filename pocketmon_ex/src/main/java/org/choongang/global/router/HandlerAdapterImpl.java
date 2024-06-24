@@ -93,7 +93,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                     //루트 URL과 경로 변수를 합쳐 전체 URL을 생성합니다.
 
                     for (String s : matched) {
-                        _url = _url.replace("{" + s + "}", "(\\w*)");
+                        _url = _url.replace("{" + s + "}", "(\\w*)");//"{" + s + "}"를 "(\\w*)") 대체
                     } //경로 변수 자리에 정규 표현식을 사용하여 매칭할 수 있도록
 
                     Pattern p2 = Pattern.compile("^" + _url+"$"); //URL을 정규 표현식으로 변환
