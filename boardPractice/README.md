@@ -2726,6 +2726,12 @@ main.tag
          </nav>   
     </jsp:attribute>
 ...
+    <jsp:attribute name="footer">
+        <section class="layout-width inner">
+            메엔 레이아웃 하단 영역
+        </section>
+    </jsp:attribute>
+...
 ```
 
 
@@ -2751,3 +2757,59 @@ SITE_TITLE=데구르르학원
 ```
 - 스타일 입히기
 main.css
+
+MemberController
+`package org.choongang.member.controllers;`
+```java
+package org.choongang.member.controllers;
+
+import org.choongang.global.config.annotations.Controller;
+import org.choongang.global.config.annotations.GetMapping;
+import org.choongang.global.config.annotations.PostMapping;
+import org.choongang.global.config.annotations.RequestMapping;
+
+@Controller
+@RequestMapping("/member")//prefix
+public class MemberController {
+
+    //회원가입 양식
+    @GetMapping("/join")
+    public String join() {
+        return "member/join";
+    }
+
+    //회원가입 처리
+    @PostMapping("/join")
+    public String joinPs(){
+        return null;
+    }
+
+    //로그인 양식
+    @GetMapping("/login")
+    public String login(){
+        return "member/login";
+    }
+
+    //로그인 처리
+    @PostMapping("/login")
+    public String loginPs(){
+        return null;
+    }
+}
+
+```
+
+join.jsp 작성
+commons.properties
+```
+...
+#회원 공통
+이메일=이메일
+비밀번호=비밀번호
+비밀번호_확인=비밀번호 확인
+회원명=회원명
+약관동의=약관동의
+약관에_동의합니다.=약관에 동의합니다.
+다시입력=다시입력
+가입하기=가입하기
+```
