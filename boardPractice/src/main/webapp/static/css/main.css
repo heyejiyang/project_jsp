@@ -108,6 +108,36 @@ nav > .inner a {
 nav > .inner a:hover{
     background: #414141; /*마우스 갖다 대면 색 변함*/
 }
+/* main.css */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #93bf85;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 8px 6px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #93bf85;
+}
+.dropdown-content.show {
+    display: block;
+}
+
+
 /* 사이트 헤더 영역 E */
 
 /* 사이트 푸터 영역 S */

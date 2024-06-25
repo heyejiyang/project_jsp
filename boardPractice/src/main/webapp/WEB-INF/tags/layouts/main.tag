@@ -54,11 +54,35 @@
              <div class="layout-width inner">
                  <a href="#">메뉴1</a>
                  <a href="#">메뉴2</a>
-                 <a href="#">메뉴3</a>
+                 <div class="dropdown">
+                     <a href="#" id="menu3">메뉴3 <i class="xi-caret-down"></i></a>
+                     <div class="dropdown-content">
+                         <a href="<c:url value="/member/join"/>">공지사항</a>
+                         <a href="<c:url value="/member/join"/>">Q&A</a>
+                     </div>
+                 </div>
                  <a href="#">메뉴4</a>
                  <a href="#">메뉴5</a>
              </div>
          </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var menu3 = document.getElementById('menu3');
+            var dropdownContent = menu3.nextElementSibling; // .dropdown-content
+
+            menu3.addEventListener('click', function(event) {
+                event.preventDefault();
+                dropdownContent.classList.toggle('show');
+            });
+
+            // Close the dropdown menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!menu3.contains(event.target)) {
+                    dropdownContent.classList.remove('show');
+                }
+            });
+        });
+    </script>
     </jsp:attribute>
     <jsp:attribute name="footer">
         <section class="layout-width inner">
