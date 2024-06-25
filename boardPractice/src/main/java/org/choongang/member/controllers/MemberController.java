@@ -17,8 +17,9 @@ public class MemberController {
 
     //회원가입 처리
     @PostMapping("/join")
-    public String joinPs(){
-        return null;
+    public String joinPs(RequestJoin form){
+        System.out.println(form);
+        return "member/join";
     }
 
     //로그인 양식
