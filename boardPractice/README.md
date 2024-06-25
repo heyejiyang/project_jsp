@@ -2660,3 +2660,94 @@ main/index.jsp
 모든 레이아웃의 공통 스타일 초기화 - style.css
 
 메인 공통 스타일 초기화 - main.css
+
+main.tag
+```
+<%@taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<fmt:setBundle basename="messages.commons"/>
+...
+<c:url var="homeUrl" value="/"/>
+<c:url var="searchUrl" value="/board/search"/>
+```
+- 버튼 추가
+- 아이콘 추가(홈, 회원가입, 로그인)
+- 로그인 회원가입 링크 삽입
+- 로고 이미지 추가
+`<c:url var="logoUrl" value="/images/logo.png"/>`
+- 게시글 검색 영역 (왼쪽 검색 로고, 오른쪽 검색바)
+```html
+...
+<jsp:attribute name="header">
+        <section class="site-top">
+            <div class="layout-width inner">
+                <div class="left">
+                    <a href="${homeUrl}">
+                        <i class="xi-home-o"></i>
+                        <fmt:message key="홈" />
+                    </a>
+                </div>
+                <div class="right">
+                    <a href="<c:url value="/member/join"/>">
+                        <i class="xi-user-plus-o"></i>
+                        <fmt:message key="회원가입"/>
+                    </a>
+                    <a href="<c:url value="'/member/login"/> ">
+                        <i class="xi-log-in"></i>
+                        <fmt:message key="로그인"/>
+                    </a>
+                </div>
+            </div>
+        </section>
+                <section class="logo-search">
+            <div class="layout-width inner">
+                <div class="left">
+                    <a href="${homeUrl}" class="logo">
+                        <img src="${logoUrl}" alt="<fmt:message key="로고"/>">
+                    </a>
+                </div>
+               <div class="right">
+                    <form class="search-box" method="GET" action="${searchUrl}" autocomplete="off">
+                        <input type="text" name="keyword" placeholder="<fmt:message key="검색어를_입력하세요."/>">
+                        <button type="submit">
+                            <i class="xi-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+         <nav>
+             <div class="layout-width inner">
+                 <a href="#">메뉴1</a>
+                 <a href="#">메뉴2</a>
+                 <a href="#">메뉴3</a>
+                 <a href="#">메뉴4</a>
+                 <a href="#">메뉴5</a>
+             </div>
+         </nav>   
+    </jsp:attribute>
+...
+```
+
+
+- common.tag
+아이콘 url
+1. 사이트 <head> 태그 안에 아래의 코드를 붙입니다.
+
+```
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+```
+
+- commons.properties
+```
+# 사이트 공통
+SITE_TITLE=데구르르학원
+
+# 사이트 상단 영역
+홈=홈
+회원가입=회원가입
+로그인=로그인
+로고=로고
+검색어를_입력하세요.=검색어를 입력하세요.
+```
+- 스타일 입히기
+main.css
