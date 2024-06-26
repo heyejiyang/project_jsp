@@ -1,41 +1,54 @@
 package org.choongang.member.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.choongang.global.config.annotations.Controller;
 import org.choongang.global.config.annotations.GetMapping;
 import org.choongang.global.config.annotations.PostMapping;
 import org.choongang.global.config.annotations.RequestMapping;
 import org.choongang.member.services.JoinService;
+import org.choongang.member.services.LoginService;
 
 @Controller
-@RequestMapping("/member")//prefix
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final JoinService joinService;
+    private final LoginService loginService;
 
-    //회원가입 양식
+    // 회원 가입 양식
     @GetMapping("/join")
     public String join() {
+
         return "member/join";
     }
 
-    //회원가입 처리
+    // 회원 가입 처리
     @PostMapping("/join")
-    public String joinPs(RequestJoin form){
+    public String joinPs(RequestJoin form, HttpServletRequest request) {
+
         joinService.process(form);
-        return "member/join";
+
+        String url = request.getContextPath() + "/member/login";
+        String script = String.format("parent.location.replace('%s');", url);
+
+        request.setAttribute("script", script);
+
+        return "commons/execute_script";
     }
 
-    //로그인 양식
+    // 로그인 양식
     @GetMapping("/login")
-    public String login(){
+    public String login() {
+
         return "member/login";
     }
 
-    //로그인 처리
+    // 로그인 처리
     @PostMapping("/login")
-    public String loginPs(){
-        return null;
+    public String loginPs(RequestLogin form) {
+        loginService.process(form);
+        return "commons/execute_script";
     }
 }

@@ -58,7 +58,7 @@
                      <a href="#" id="menu3">메뉴3 <i class="xi-caret-down"></i></a>
                      <div class="dropdown-content">
                          <a href="<c:url value="/member/join"/>">공지사항</a>
-                         <a href="<c:url value="/member/join"/>">Q&A</a>
+                         <a href="<c:url value="/member/login"/>">Q&A</a>
                      </div>
                  </div>
                  <a href="#">메뉴4</a>
@@ -75,7 +75,7 @@
                 dropdownContent.classList.toggle('show');
             });
 
-            // Close the dropdown menu when clicking outside
+            // 바깥쪽 누르면 드롭다운 닫힘
             document.addEventListener('click', function(event) {
                 if (!menu3.contains(event.target)) {
                     dropdownContent.classList.remove('show');
