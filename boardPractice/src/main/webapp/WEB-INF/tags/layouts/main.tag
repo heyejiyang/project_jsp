@@ -86,7 +86,7 @@
     </jsp:attribute>
     <jsp:attribute name="footer">
         <section class="layout-width inner">
-            메엔 레이아웃 하단 영역
+            메인 레이아웃 하단 영역
         </section>
     </jsp:attribute>
     <jsp:attribute name="commonCss">
