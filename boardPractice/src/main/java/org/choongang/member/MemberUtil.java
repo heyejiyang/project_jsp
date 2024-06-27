@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.choongang.global.config.annotations.Component;
+import org.choongang.global.config.containers.BeanContainer;
 import org.choongang.member.constants.UserType;
 import org.choongang.member.entities.Member;
 
@@ -30,6 +31,7 @@ public class MemberUtil {
     @return
      */
     public Member getMember() {
+        HttpSession session = BeanContainer.getInstance().getBean(HttpSession.class);
         Member member = (Member)session.getAttribute("member");
         return member;
     }
